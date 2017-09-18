@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
@@ -8,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
  * Created by neil on 9/12/17.
  */
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp (name = "TeleOp", group = "Test")
-
+@Disabled
 public class TeleOp extends LinearOpMode {
     DcMotor leftF, leftB, rightF, rightB;
 
@@ -52,13 +53,17 @@ public class TeleOp extends LinearOpMode {
             leftB.setPower(strafe);
             rightF.setPower(strafe);
             rightB.setPower(-strafe);
+        } else if (gamepad1.x) {
+            leftF.setPower(-strafe);
+            rightB.setPower(-strafe);
+        } else if (gamepad1.b) {
+            leftB.setPower(strafe);
+            rightF.setPower(strafe);
         } else {
             leftF.setPower(lFPower);
             leftB.setPower(lBPower);
             rightF.setPower(rFPower);
             rightB.setPower(rBPower);
         }
-
-
     }
 }
