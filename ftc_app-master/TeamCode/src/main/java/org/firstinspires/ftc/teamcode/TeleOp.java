@@ -34,12 +34,22 @@ public class TeleOp extends LinearOpMode {
     }
 
     public void teleop() throws InterruptedException {
+        int driveCase = 0;
+
         double lFPower = gamepad1.left_stick_y;
         double lBPower = gamepad1.left_stick_y;
         double rFPower = gamepad1.right_stick_y;
         double rBPower = gamepad1.right_stick_y;
 
         double strafe = gamepad1.left_stick_x;
+
+        double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+        double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
+        double rightX = gamepad1.right_stick_x;
+        final double v1 = r * Math.cos(robotAngle) + rightX;
+        final double v2 = r * Math.sin(robotAngle) - rightX;
+        final double v3 = r * Math.sin(robotAngle) + rightX;
+        final double v4 = r * Math.cos(robotAngle) - rightX;
 
         lFPower = Range.clip(lFPower , -1, 1);
         lBPower = Range.clip(lBPower , -1, 1);
@@ -48,22 +58,29 @@ public class TeleOp extends LinearOpMode {
 
         strafe = Range.clip(strafe, -1, 1);
 
-        if (Math.abs(strafe) > 0.35){
-            leftF.setPower(-strafe);
-            leftB.setPower(strafe);
-            rightF.setPower(strafe);
-            rightB.setPower(-strafe);
-        } else if (gamepad1.x) {
-            leftF.setPower(-strafe);
-            rightB.setPower(-strafe);
-        } else if (gamepad1.b) {
-            leftB.setPower(strafe);
-            rightF.setPower(strafe);
+        if (gamepad1.left_bumper) {
+            driveCase = 1;
+        } else if (gamepad1.right_bumper){
+            driveCase = 0;
+        }
+
+        if (driveCase == 0) {
+            if (Math.abs(strafe) > 0.25){
+                leftF.setPower(-strafe);
+                leftB.setPower(strafe);
+                rightF.setPower(strafe);
+                rightB.setPower(-strafe);
+            } else {
+                leftF.setPower(lFPower);
+                leftB.setPower(lBPower);
+                rightF.setPower(rFPower);
+                rightB.setPower(rBPower);
+            }
         } else {
-            leftF.setPower(lFPower);
-            leftB.setPower(lBPower);
-            rightF.setPower(rFPower);
-            rightB.setPower(rBPower);
+            leftF.setPower(v1);
+            rightF.setPower(v2);
+            leftB.setPower(v3);
+            rightB.setPower(v4);
         }
     }
 }
