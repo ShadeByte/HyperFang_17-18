@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.*;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -10,9 +11,8 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp (name = "TeleOp", group = "Test")
-
-public class TeleOp extends LinearOpMode {
+@TeleOp(name="TrollBot", group="Test")
+public class TrollBotTeleOp extends LinearOpMode {
     DcMotor leftF, leftB, rightF, rightB;
 
     @Override
@@ -32,11 +32,18 @@ public class TeleOp extends LinearOpMode {
     }
 
     public void initSystem() throws InterruptedException {
-        // init stuff
+        leftF = hardwareMap.get(DcMotor.class, "leftF");
+        leftB = hardwareMap.get(DcMotor.class, "leftB");
+        rightF = hardwareMap.get(DcMotor.class, "rightF");
+        rightB = hardwareMap.get(DcMotor.class, "rightB");
+        rightF.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void teleop() throws InterruptedException {
         int driveCase = 0;
+
+        telemetry.addData("Drive",  "Case = " + driveCase);
+        telemetry.update();
 
         double lFPower = gamepad1.left_stick_y;
         double lBPower = gamepad1.left_stick_y;
