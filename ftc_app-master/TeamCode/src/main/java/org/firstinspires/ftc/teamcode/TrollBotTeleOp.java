@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
@@ -14,6 +16,15 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="TrollBot", group="Test")
 public class TrollBotTeleOp extends LinearOpMode {
     DcMotor leftF, leftB, rightF, rightB;
+
+    int driveCase = 0;
+
+    ColorSensor sensorColor;
+    float hsvValues[] = {0F,0F,0F};
+
+    final double SCALE_FACTOR = 255;
+
+    int jewelState;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -37,12 +48,20 @@ public class TrollBotTeleOp extends LinearOpMode {
         rightF = hardwareMap.get(DcMotor.class, "rightF");
         rightB = hardwareMap.get(DcMotor.class, "rightB");
         rightF.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        sensorColor = hardwareMap.get(ColorSensor.class, "color_distance");
+        sensorColor.enableLed(true);
     }
 
     public void teleop() throws InterruptedException {
-        int driveCase = 0;
+
+        Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
+                (int) (sensorColor.green() * SCALE_FACTOR),
+                (int) (sensorColor.blue() * SCALE_FACTOR),
+                hsvValues);
 
         telemetry.addData("Drive",  "Case = " + driveCase);
+        telemetry.addData("Jewel ",  "State = " + jewelState);
         telemetry.update();
 
         double lFPower = gamepad1.left_stick_y;
@@ -53,12 +72,12 @@ public class TrollBotTeleOp extends LinearOpMode {
         double strafe = gamepad1.left_stick_x;
 
         double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-        double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
+        double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
         double rightX = gamepad1.right_stick_x;
-        final double v1 = r * Math.cos(robotAngle) + rightX;
-        final double v2 = r * Math.sin(robotAngle) - rightX;
-        final double v3 = r * Math.sin(robotAngle) + rightX;
-        final double v4 = r * Math.cos(robotAngle) - rightX;
+        final double v1 = r * Math.cos(robotAngle) - rightX;
+        final double v2 = r * Math.sin(robotAngle) + rightX;
+        final double v3 = r * Math.sin(robotAngle) - rightX;
+        final double v4 = r * Math.cos(robotAngle) + rightX;
 
         lFPower = Range.clip(lFPower , -1, 1);
         lBPower = Range.clip(lBPower , -1, 1);
@@ -66,6 +85,12 @@ public class TrollBotTeleOp extends LinearOpMode {
         rBPower = Range.clip(rBPower, -1, 1);
 
         strafe = Range.clip(strafe, -1, 1);
+
+        if (sensorColor.red() > sensorColor.blue() && hsvValues[0] < 50) {
+            jewelState = 1;
+        } else {
+            jewelState = 0;
+        }
 
         if (gamepad1.left_bumper) {
             driveCase = 1;

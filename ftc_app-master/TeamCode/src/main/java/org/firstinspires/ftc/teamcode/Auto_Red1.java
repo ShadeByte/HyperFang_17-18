@@ -23,8 +23,6 @@ public class Auto_Red1 extends LinearOpMode {
 
     ModernRoboticsI2cColorSensor jewelDetector;
 
-    Strafe sDrive = new Strafe();
-
     BNO055IMU imu;
 
     Orientation angles;
@@ -57,16 +55,9 @@ public class Auto_Red1 extends LinearOpMode {
         int column = vuforia.getDecodedColumn();
 
         if (jewelDetector.blue() < jewelDetector.red()) {
-            sDrive.StrafeLeft(1000);
 
             switch (column) {
                 case 1:
-                    sDrive.StrafeLeft(2000);
-                    //driveFd(500);
-                    //release();
-                    //driveBd(500);
-                    //rotate180();
-                    sDrive.SrafeDR(false, 100);
             }
         }
     }

@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.util.Range;
 public class TeleOp extends LinearOpMode {
     DcMotor leftF, leftB, rightF, rightB;
 
+    int driveCase = 0;
+
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry.addData("Inintializing", "");
@@ -36,8 +38,6 @@ public class TeleOp extends LinearOpMode {
     }
 
     public void teleop() throws InterruptedException {
-        int driveCase = 0;
-
         double lFPower = gamepad1.left_stick_y;
         double lBPower = gamepad1.left_stick_y;
         double rFPower = gamepad1.right_stick_y;
