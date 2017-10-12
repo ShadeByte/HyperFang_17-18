@@ -52,7 +52,7 @@ public class SensorMROpticalDistance extends LinearOpMode {
   public void runOpMode() {
 
     // get a reference to our Light Sensor object.
-    odsSensor = hardwareMap.get(OpticalDistanceSensor.class, "sensor_ods");
+    odsSensor = hardwareMap.get(OpticalDistanceSensor.class, "ods");
 
     // wait for the start button to be pressed.
     waitForStart();

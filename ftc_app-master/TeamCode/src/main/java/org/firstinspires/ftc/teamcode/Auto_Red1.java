@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Func;
@@ -23,6 +24,8 @@ public class Auto_Red1 extends LinearOpMode {
 
     ModernRoboticsI2cColorSensor jewelDetector;
 
+    OpticalDistanceSensor odsFL;
+
     BNO055IMU imu;
 
     Orientation angles;
@@ -36,6 +39,8 @@ public class Auto_Red1 extends LinearOpMode {
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit            = BNO055IMU.AngleUnit.DEGREES;
+
+        odsFL = hardwareMap.get(OpticalDistanceSensor.class, "odsFL");
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
